@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.nowornever.app",
+    "sha256_cert_fingerprints": ["66DA17377EF9B993B8F7CF18A1E7D1577948C92A2B4084DF879DB0EF1670F139"]
+  }
+}]

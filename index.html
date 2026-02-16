@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="NOW OR NEVER - A mobile-first task management app with urgency-based priorities">
+  <meta name="theme-color" content="#050510">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self';">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ffff' stroke-width='2'><circle cx='12' cy='12' r='10'/><circle cx='12' cy='12' r='3'/></svg>">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NOW OR NEVER">
+  <link rel="stylesheet" href="styles.css">
+  <title>NOW OR NEVER</title>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="NOW OR NEVER logo">
+          <title>NOW OR NEVER</title>
+          <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+        <div class="logo-text"><span>NOW</span><span class="or"> OR </span><span>NEVER</span></div>
+      </div>
+      <div class="stats">
+        <div class="stat-badge streak-badge" role="status">
+          <span id="streak">0</span>
+        </div>
+        <div class="stat-badge active-badge" role="status">
+          <span id="active-count">0</span>
+        </div>
+        <button type="button" class="settings-btn" id="settings-btn" aria-label="Open settings">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <title>Settings</title>
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m11-11h-4M5 12H1m17.36-5.64l-2.83 2.83M9.46 14.54l-2.83 2.83m0-10.73l2.83 2.83m5.08 5.07l2.83 2.83"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="pulse-dot"></div>
+        Active Missions
+      </div>
+      <span class="section-subtitle">By urgency</span>
+    </div>
+
+    <ul class="task-list" id="task-list"></ul>
+
+    <!-- Graveyard Section -->
+    <div class="graveyard-section" id="graveyard-section">
+      <div class="section-header graveyard-header">
+        <div class="section-title graveyard-title">
+          <svg class="graveyard-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 2v20M2 12h20"/>
+          </svg>
+          The Graveyard
+        </div>
+        <span class="section-subtitle graveyard-subtitle" id="graveyard-count">0 souls</span>
+      </div>
+      <ul class="graveyard-list" id="graveyard-list"></ul>
+    </div>
+
+    <div class="stats-section">
+      <div class="stats-grid">
+        <div class="completed">
+          <div class="stat-value" id="completed-count">0</div>
+          <div class="stat-label">Done</div>
+        </div>
+        <div class="lost">
+          <div class="stat-value" id="expired-count">0</div>
+          <div class="stat-label">Lost</div>
+        </div>
+        <div class="rate">
+          <div class="stat-value" id="success-rate">0%</div>
+          <div class="stat-label">Rate</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="bottom-bar">
+    <button type="button" class="new-task-btn" id="new-task-btn" aria-label="Create new mission">
+      <span class="plus-icon">+</span> New Mission
+    </button>
+  </div>
+
+  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">New Mission</h2>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Close modal">×</button>
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="task-input">Mission Objective</label>
+        <input type="text" class="text-input" id="task-input" placeholder="What needs to be done?" maxlength="200">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Deadline</label>
+        <div class="time-presets" id="time-presets" role="group" aria-label="Time presets">
+          <button type="button" class="time-preset" data-mins="15">15m</button>
+          <button type="button" class="time-preset" data-mins="30">30m</button>
+          <button type="button" class="time-preset selected" data-mins="60">1h</button>
+          <button type="button" class="time-preset" data-mins="120">2h</button>
+          <button type="button" class="time-preset" data-mins="240">4h</button>
+          <button type="button" class="time-preset" data-mins="480">8h</button>
+        </div>
+      </div>
+      <button type="button" class="submit-btn" id="submit-btn" disabled>Deploy Mission</button>
+    </div>
+  </div>
+
+  <div class="burst-overlay" id="success-burst"><div class="success-burst"></div></div>
+  <div class="burst-overlay" id="failure-burst"><div class="failure-burst"></div></div>
+  <div class="burst-overlay" id="shatter-burst"><div class="shatter-burst"></div></div>
+
+  <div class="hyperfocus" id="hyperfocus" role="dialog" aria-modal="true" aria-label="Focus mode">
+    <button type="button" class="exit-btn" id="hf-exit-btn" aria-label="Exit focus mode">×</button>
+    <div class="hf-status" id="hf-status">STABLE</div>
+    <h1 class="hf-task" id="hf-task"><span class="visually-hidden">No task selected</span></h1>
+    <div class="hf-timer" id="hf-timer" aria-live="polite">00:00</div>
+    <button type="button" class="btn btn-complete hf-complete-btn" id="hf-complete-btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Complete
+    </button>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal-content settings-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="settings-title">Settings</h2>
+        <button type="button" class="modal-close" id="settings-close" aria-label="Close settings">×</button>
+      </div>
+      <div class="settings-list">
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Sound Effects</span>
+            <span class="setting-desc">Play sounds on actions</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="setting-sound" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Haptic Feedback</span>
+            <span class="setting-desc">Vibration on interactions</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="setting-haptic" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Graveyard</span>
+            <span class="setting-desc">24-hour recovery buffer</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="setting-graveyard" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Default Time</span>
+            <span class="setting-desc">Preset for new missions</span>
+          </div>
+          <select class="setting-select" id="setting-default-time">
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="60" selected>1 hour</option>
+            <option value="120">2 hours</option>
+            <option value="240">4 hours</option>
+            <option value="480">8 hours</option>
+          </select>
+        </div>
+        <div class="setting-item setting-item-danger">
+          <div class="setting-info">
+            <span class="setting-label">Clear All Data</span>
+            <span class="setting-desc">Delete all tasks and stats</span>
+          </div>
+          <button type="button" class="btn btn-danger" id="clear-data-btn">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Add Presets (for long-press) -->
+  <div class="quick-presets" id="quick-presets" role="menu" aria-label="Quick time presets">
+    <button type="button" class="quick-preset-btn" data-mins="15" role="menuitem">15m</button>
+    <button type="button" class="quick-preset-btn" data-mins="30" role="menuitem">30m</button>
+    <button type="button" class="quick-preset-btn" data-mins="60" role="menuitem">1h</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
